@@ -146,7 +146,18 @@ const getOrderDetails = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { checkoutOrder, getMyOrders, getOrderDetails };
+const getAllOrders = asyncHandler(async (req, res) => {
+  const ordersRes = await db.query(`
+    SELECT o.*, u.name AS user_name, u.email AS user_email
+    FROM orders o
+    JOIN users u ON o.user_id = u.id
+    ORDER BY o.created_at DESC
+  `);
+
+  res.json(ordersRes.rows);
+});
+
+module.exports = { checkoutOrder, getMyOrders, getOrderDetails, getAllOrders };
 
 /*
 ✅ Results:
