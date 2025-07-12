@@ -1,0 +1,160 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import cartService from "./cartService";
+
+// Thunks
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async ({ product_variant_id, quantity }, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const token = state.user.userInfo?.token;
+
+      if (!token) throw new Error("No token found");
+
+      return await cartService.addToCart(product_variant_id, quantity, token);
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || err.message
+      );
+    }
+  }
+);
+
+export const getCart = createAsyncThunk("cart/getCart", async (_, thunkAPI) => {
+  try {
+    const state = thunkAPI.getState();
+    const token = state.user.userInfo?.token;
+
+    if (!token) throw new Error("No token found");
+    return await cartService.getCart(token);
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+  }
+});
+
+export const updateCartItemQuantity = createAsyncThunk(
+  "cart/updateCartItemQuantity",
+  async ({ cartItemId, quantity }, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const token = state.user.userInfo?.token;
+
+      if (!token) throw new Error("No token found");
+
+      return await cartService.updateCartItemQuantity(
+        cartItemId,
+        quantity,
+        token
+      );
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || err.message
+      );
+    }
+  }
+);
+
+export const removeItemFromCart = createAsyncThunk(
+  "cart/removeItemFromCart",
+  async (cartItemId, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState();
+      const token = state.user.userInfo?.token;
+      if (!token) throw new Error("No token found");
+      return await cartService.removeItemFromCart(cartItemId, token);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
+// Slice
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: {
+    cart: null,
+    cart_items: [],
+    status: "idle",
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(addToCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const existing = state.cart_items.find(
+          (item) => item.id === action.payload.id
+        );
+        if (existing) {
+          existing.quantity = action.payload.quantity;
+          existing.total_price = action.payload.total_price;
+        } else {
+          state.cart_items.push(action.payload);
+        }
+      })
+      .addCase(addToCart.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+
+      .addCase(getCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getCart.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.cart = action.payload.cart;
+        state.cart_items = action.payload.cart_items;
+      })
+      .addCase(getCart.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(updateCartItemQuantity.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const updated = action.payload;
+        const existing = state.cart_items.find(
+          (item) => item.id === updated.id
+        );
+
+        if (existing) {
+          existing.quantity = updated.quantity;
+          existing.total_price = updated.total_price;
+        }
+
+        // Eğer quantity 0 olduysa (backend sildiyse), item'ı localden de çıkar
+        if (updated.quantity === 0) {
+          state.cart_items = state.cart_items.filter(
+            (item) => item.id !== updated.id
+          );
+        }
+      })
+      .addCase(updateCartItemQuantity.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(removeItemFromCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(removeItemFromCart.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Silinen öğeyi state.cart_items listesinden çıkar
+        state.cart_items = state.cart_items.filter(
+          (item) => item.id !== action.meta.arg
+        );
+      })
+      .addCase(removeItemFromCart.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
+  },
+});
+
+export default cartSlice.reducer;

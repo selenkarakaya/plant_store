@@ -88,10 +88,17 @@ const getCart = asyncHandler(async (req, res) => {
   }
 
   const itemsRes = await db.query(
-    `SELECT ci.id, ci.quantity, ci.unit_price, ci.total_price, pv.variant_name, pv.product_id
-     FROM cart_items ci
-     JOIN product_variants pv ON ci.product_variant_id = pv.id
-     WHERE ci.cart_id = $1`,
+    `SELECT
+    ci.id, ci.quantity, ci.unit_price, ci.total_price,
+    pv.variant_name, pv.internal_pot_diameter, pv.product_id, pv.stock,
+    p.name AS product_name, p.image_url AS product_image_url,
+    pd.additional_info -- eğer plant_details bilgisi istersen
+  FROM cart_items ci
+  JOIN product_variants pv ON ci.product_variant_id = pv.id
+  JOIN products p ON pv.product_id = p.id
+  LEFT JOIN plant_details pd ON p.id = pd.product_id
+  WHERE ci.cart_id = $1
+  `,
     [cart.id]
   );
 

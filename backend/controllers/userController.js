@@ -103,12 +103,12 @@ const getUserProfile = asyncHandler(async (req, res) => {
   res.json(rows[0]);
 });
 
+// ✅ Profile update (name, email, etc.)
 const updateUserProfile = asyncHandler(async (req, res) => {
   const { id } = req.user;
-  const { name, email, password, phone, address } = req.body;
+  const { name, email, phone, address } = req.body;
 
   const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-
   const user = rows[0];
 
   if (!user) {
@@ -116,22 +116,16 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  let password_hash = user.password_hash;
-  if (password) {
-    const saltRounds = 10;
-    password_hash = await bcrypt.hash(password, saltRounds);
-  }
-
   const updated = await db.query(
     `
-  UPDATE users
-  SET name =$1, email = $2,  password_hash= $3, phone = $4, address = $5,  updated_at = NOW()
-  WHERE id = $6
-  RETURNING id,name,email,password_hash,phone,address,updated_at`,
+    UPDATE users
+    SET name = $1, email = $2, phone = $3, address = $4, updated_at = NOW()
+    WHERE id = $5
+    RETURNING id, name, email, phone, address, updated_at
+  `,
     [
       name || user.name,
       email || user.email,
-      password_hash,
       phone || user.phone,
       address || user.address,
       id,
@@ -140,6 +134,48 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
   res.json(updated.rows[0]);
 });
+const changeUserPassword = asyncHandler(async (req, res) => {
+  const { id } = req.user;
+  const { currentPassword, newPassword } = req.body;
+
+  if (!newPassword || !currentPassword) {
+    res.status(400);
+    throw new Error("Both current and new password are required");
+  }
+
+  const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+  const user = rows[0];
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+  if (!isMatch) {
+    res.status(401);
+    throw new Error("Current password is incorrect");
+  }
+
+  const saltRounds = 10;
+  const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
+
+  await db.query(
+    `
+    UPDATE users
+    SET password_hash = $1, updated_at = NOW()
+    WHERE id = $2
+  `,
+    [newPasswordHash, id]
+  );
+
+  res.json({ message: "Password updated successfully" });
+});
 
 // Export the registerUser function so it can be used in other files
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+module.exports = {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  updateUserProfile,
+  changeUserPassword,
+};

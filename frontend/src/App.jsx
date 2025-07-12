@@ -4,7 +4,13 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Products from "./pages/Products";
+import UserProfile from "./pages/UserProfile";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import PrivateRoute from "./utils/PrivateRoute";
+import ProductListPage from "./pages/ProductListPage";
+import Products from "./pages/ProductListPage";
+import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
 
 function App() {
   return (
@@ -13,9 +19,17 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Register" element={<Register />} />
-          <Route path="/Products" element={<Products />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/me" element={<UserProfile />} />
+          </Route>
+
+          <Route path="/shoppingCart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/category/:categoryId" element={<ProductListPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
         </Routes>
         <Footer />
       </Router>

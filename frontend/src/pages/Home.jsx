@@ -1,10 +1,12 @@
-import Products from "./Products";
+import ProductListPage from "./ProductListPage";
+import DiscountPopup from "../components/DiscountPopup";
+import Products from "../pages/Products";
 
 function Home() {
   return (
     <div>
-      home
-      <Products />
+      <ProductListPage />
+      <DiscountPopup />
     </div>
   );
 }

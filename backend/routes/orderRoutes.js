@@ -9,7 +9,7 @@ const {
 } = require("../controllers/orderController");
 
 router.post("/checkout", protect, checkoutOrder); //Create order
-router.get("/my", protect, getMyOrders); //User's order history
+router.get("/myorders", protect, getMyOrders); //User's order history
 router.get("/:orderId", protect, getOrderDetails); //Details of the products in the order
 router.get("/", protect, isAdmin, getAllOrders); // admin route
 

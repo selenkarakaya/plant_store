@@ -1,34 +1,58 @@
-import { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/products/productSlice";
-
-function Products() {
+import ProductCard from "../components/ProductCard";
+import LoadingSpinner from "../components/LoadingSpinner";
+const Products = () => {
   const dispatch = useDispatch();
-  const { items, loading, error } = useSelector((state) => state.products);
+
+  const {
+    items: products,
+    status,
+    error,
+  } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (loading) return <p>Yükleniyor...</p>;
-  if (error) return <p>Hata: {error}</p>;
-  console.log(items[0]);
+  const shuffledProducts = useMemo(
+    () => [...products].sort(() => Math.random() - 0.5),
+    [products]
+  );
 
+  if (error)
+    return (
+      <div
+        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md mx-auto mt-6"
+        role="alert"
+      >
+        <strong className="font-bold">Oops! </strong>
+        <span className="block sm:inline">Something went wrong: {error}</span>
+      </div>
+    );
+
+  if (products.length === 0)
+    return (
+      <div className="text-center text-gray-600 mt-10">
+        <p className="text-xl mb-2">😞 Oops! No plants to show right now.</p>
+        <p>Try checking back later or explore other categories 🌿</p>
+      </div>
+    );
+
+  if (status === "loading") {
+    return <LoadingSpinner />;
+  }
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {items.map((product) => (
-        <div key={product.id} className="border p-4">
-          <h2>{product.name}</h2>
-          <p>£{product.price}</p>
-          <img
-            src={product.image_url}
-            alt={product.name}
-            className="w-full h-48 object-cover"
-          />
-        </div>
-      ))}
+    <div>
+      <h2 className="text-xl font-bold mb-4">Random Products</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {shuffledProducts.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default Products;
