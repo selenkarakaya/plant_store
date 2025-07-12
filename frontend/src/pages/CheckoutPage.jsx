@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkout, resetCheckoutStatus } from "../features/orders/orderSlice";
 import { getCart } from "../features/carts/cartSlice"; // Sepet verisini almak için
-import { Link } from "react-router-dom";
+
 const CheckoutPage = () => {
   const dispatch = useDispatch();
   const { cart, cart_items } = useSelector((state) => state.cart);
