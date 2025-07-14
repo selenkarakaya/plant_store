@@ -5,6 +5,7 @@ import { fetchCategories } from "../features/category/categorySlice";
 import CategoryModal from "./CategoryModal";
 import { FiSearch, FiUser, FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const Header = () => {
         </Link>
         <div className="flex items-center gap-4 text-gray-700 text-xl cursor-pointer">
           <FiSearch title="Search" className="hover:text-green-700" />
-
+          <SearchBar />
           {userInfo ? (
             <Link to="/me">
               <FiUser title="User" className="hover:text-green-700" />

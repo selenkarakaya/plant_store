@@ -1,6 +1,6 @@
 function OrderDetails({ order }) {
   if (!order || !order.items) return null;
-  console.log(order);
+
   return (
     <div className="space-y-2">
       {order.items.map((item) => (

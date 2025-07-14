@@ -14,6 +14,7 @@ import ProductListPage from "./pages/ProductListPage";
 import Products from "./pages/ProductListPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import SearchResultsPage from "./pages/SearchResultsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/category/:categoryId" element={<ProductListPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/search" element={<SearchResultsPage />} />
         </Routes>
         <Footer />
       </Router>

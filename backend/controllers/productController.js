@@ -8,7 +8,7 @@ const getProducts = asyncHandler(async (req, res) => {
     FROM products p
     LEFT JOIN product_variants v ON p.id = v.product_id
     GROUP BY p.id, p.name, p.family, p.description, p.image_url
-    LIMIT 10
+
   `;
   //LIMIT 10
   const { rows } = await db.query(query);
