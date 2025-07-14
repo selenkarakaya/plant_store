@@ -1,17 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import orderService from "./orderService";
 
-// Sipariş oluştur (checkout)
+// Checkout (place an order)
 export const checkout = createAsyncThunk(
   "orders/checkout",
   async (orderData, thunkAPI) => {
     try {
-      const state = thunkAPI.getState();
-      const token = state.user.userInfo?.token;
-
-      if (!token) throw new Error("No token found");
-
-      return await orderService.checkoutOrder(orderData, token);
+      return await orderService.checkoutOrder(orderData);
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message
@@ -20,17 +15,26 @@ export const checkout = createAsyncThunk(
   }
 );
 
-// Kullanıcının siparişlerini çek
+// Get orders belonging to the current user
 export const fetchMyOrders = createAsyncThunk(
   "orders/fetchMyOrders",
   async (_, thunkAPI) => {
     try {
-      const state = thunkAPI.getState();
-      const token = state.user.userInfo?.token;
+      return await orderService.getMyOrders();
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || err.message
+      );
+    }
+  }
+);
 
-      if (!token) throw new Error("No token found");
-
-      return await orderService.getMyOrders(token);
+// Fetch detailed order information
+export const fetchOrderDetails = createAsyncThunk(
+  "orders/fetchOrderDetails",
+  async (orderId, thunkAPI) => {
+    try {
+      return await orderService.getOrderDetails(orderId);
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message
@@ -48,6 +52,8 @@ const orderSlice = createSlice({
     error: null,
     checkoutStatus: "idle",
     checkoutError: null,
+    detailStatus: "idle",
+    detailError: null,
   },
   reducers: {
     clearOrderDetails(state) {
@@ -87,6 +93,18 @@ const orderSlice = createSlice({
       .addCase(fetchMyOrders.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+      })
+      .addCase(fetchOrderDetails.pending, (state) => {
+        state.detailStatus = "loading";
+        state.detailError = null;
+      })
+      .addCase(fetchOrderDetails.fulfilled, (state, action) => {
+        state.detailStatus = "succeeded";
+        state.orderDetails = action.payload;
+      })
+      .addCase(fetchOrderDetails.rejected, (state, action) => {
+        state.detailStatus = "failed";
+        state.detailError = action.payload;
       });
   },
 });

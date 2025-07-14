@@ -2,32 +2,26 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL + "/orders";
 
-// Checkout (sipariş oluşturma)
+// Checkout (place an order)
 const checkoutOrder = async (orderData, token) => {
   const response = await axios.post(`${API_URL}/checkout`, orderData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    withCredentials: true,
   });
   return response.data;
 };
 
-// Kullanıcının siparişlerini getir
-const getMyOrders = async (token) => {
+// Get orders belonging to the current user
+const getMyOrders = async () => {
   const response = await axios.get(`${API_URL}/myorders`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    withCredentials: true,
   });
   return response.data;
 };
 
-// Detaylı sipariş bilgisi
-const getOrderDetails = async (orderId, token) => {
+// Fetch detailed order information
+const getOrderDetails = async (orderId) => {
   const response = await axios.get(`${API_URL}/${orderId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    withCredentials: true,
   });
   return response.data;
 };

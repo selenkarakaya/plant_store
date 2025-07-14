@@ -9,13 +9,23 @@ const UserInfo = () => {
   const { userInfo, updateStatus, updateError, passwordStatus, passwordError } =
     useSelector((state) => state.user);
 
-  // Profil güncelleme formu state'i
   const [profileData, setProfileData] = useState({
-    name: userInfo?.name || "",
-    email: userInfo?.email || "",
-    phone: userInfo?.phone || "",
-    address: userInfo?.address || "",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
   });
+
+  useEffect(() => {
+    if (userInfo) {
+      setProfileData({
+        name: userInfo.name || "",
+        email: userInfo.email || "",
+        phone: userInfo.phone || "",
+        address: userInfo.address || "",
+      });
+    }
+  }, [userInfo]);
 
   // Parola değiştirme formu state'i
   const [passwordData, setPasswordData] = useState({
