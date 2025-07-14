@@ -10,7 +10,7 @@ const CheckoutPage = () => {
     (state) => state.orders
   );
   const userInfo = useSelector((state) => state.user.userInfo);
-
+  console.log(userInfo.email);
   const [email, setEmail] = useState(userInfo?.email || "");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -77,7 +77,7 @@ const CheckoutPage = () => {
           <input
             type="email"
             readOnly
-            value={email}
+            value={userInfo.email}
             className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
           />
         </div>

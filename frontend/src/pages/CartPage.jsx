@@ -23,6 +23,7 @@ const CartPage = () => {
     (sum, item) => sum + Number(item.total_price),
     0
   );
+
   const discount = Number(cart?.discount_amount || 0);
   const shippingFee = selectedShipping === "express" ? 9.99 : 4.99;
   const total = subtotal - discount + shippingFee;
