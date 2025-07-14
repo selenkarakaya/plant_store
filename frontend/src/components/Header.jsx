@@ -14,6 +14,7 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.user);
   const { cart_items } = useSelector((state) => state.cart);
+  const [searchTerm, setSearchTerm] = useState("");
   const itemCount = cart_items.reduce(
     (sum, item) => sum + Number(item.quantity),
     0
@@ -44,7 +45,8 @@ const Header = () => {
         </Link>
         <div className="flex items-center gap-4 text-gray-700 text-xl cursor-pointer">
           <FiSearch title="Search" className="hover:text-green-700" />
-          <SearchBar />
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
           {userInfo ? (
             <Link to="/me">
               <FiUser title="User" className="hover:text-green-700" />
