@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfile, setUserInfo } from "./features/user/userSlice";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -13,6 +16,29 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 
 function App() {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const result = await dispatch(fetchUserProfile()).unwrap();
+        dispatch(setUserInfo(result)); // store the user in redux
+      } catch (err) {
+        console.log("Session not found:", err.message);
+      }
+    };
+
+    if (!userInfo) {
+      checkAuth();
+    }
+  }, [dispatch, userInfo]);
+
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     alert("Session started successfully!");
+  //   }
+  // }, [userInfo]);
   return (
     <>
       <Router>

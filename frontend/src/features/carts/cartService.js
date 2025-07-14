@@ -3,54 +3,37 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL + "/cart";
 
 // Add item to cart
-
-const addToCart = async (product_variant_id, quantity = 1, token) => {
-  const response = await axios.post(
-    `${API_URL}/add`,
-    { product_variant_id, quantity },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
+const addToCart = (product_variant_id, quantity) => {
+  return axios
+    .post(
+      `${API_URL}/add`,
+      { product_variant_id, quantity },
+      { withCredentials: true }
+    )
+    .then((res) => res.data); // sadece data döndür
 };
 
-// Get active cart
-const getCart = async (token) => {
-  const response = await axios.get(API_URL, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+const getCart = () => {
+  return axios
+    .get(`${API_URL}`, { withCredentials: true })
+    .then((res) => res.data); // sadece data döndür
 };
 
-// Update item quantity
-const updateCartItemQuantity = async (cartItemId, quantity, token) => {
-  const response = await axios.patch(
-    `${API_URL}/update/${cartItemId}`,
-    { quantity },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
+const updateCartItemQuantity = (cartItemId, quantity) => {
+  return axios
+    .patch(
+      `${API_URL}/update/${cartItemId}`,
+      { quantity },
+      { withCredentials: true }
+    )
+    .then((res) => res.data); // sadece data döndür
 };
 
-// Remove item
-const removeItemFromCart = async (cartItemId, token) => {
-  const response = await axios.delete(`${API_URL}/remove/${cartItemId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+const removeItemFromCart = (cartItemId) => {
+  return axios
+    .delete(`${API_URL}/remove/${cartItemId}`, { withCredentials: true })
+    .then((res) => res.data); // sadece data döndür
 };
-
 const cartService = {
   addToCart,
   getCart,

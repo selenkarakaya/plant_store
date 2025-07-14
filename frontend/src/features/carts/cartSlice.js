@@ -6,12 +6,7 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ product_variant_id, quantity }, thunkAPI) => {
     try {
-      const state = thunkAPI.getState();
-      const token = state.user.userInfo?.token;
-
-      if (!token) throw new Error("No token found");
-
-      return await cartService.addToCart(product_variant_id, quantity, token);
+      return await cartService.addToCart(product_variant_id, quantity);
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message
@@ -22,11 +17,7 @@ export const addToCart = createAsyncThunk(
 
 export const getCart = createAsyncThunk("cart/getCart", async (_, thunkAPI) => {
   try {
-    const state = thunkAPI.getState();
-    const token = state.user.userInfo?.token;
-
-    if (!token) throw new Error("No token found");
-    return await cartService.getCart(token);
+    return await cartService.getCart();
   } catch (err) {
     return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
   }
@@ -36,16 +27,7 @@ export const updateCartItemQuantity = createAsyncThunk(
   "cart/updateCartItemQuantity",
   async ({ cartItemId, quantity }, thunkAPI) => {
     try {
-      const state = thunkAPI.getState();
-      const token = state.user.userInfo?.token;
-
-      if (!token) throw new Error("No token found");
-
-      return await cartService.updateCartItemQuantity(
-        cartItemId,
-        quantity,
-        token
-      );
+      return await cartService.updateCartItemQuantity(cartItemId, quantity);
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message
@@ -58,10 +40,7 @@ export const removeItemFromCart = createAsyncThunk(
   "cart/removeItemFromCart",
   async (cartItemId, thunkAPI) => {
     try {
-      const state = thunkAPI.getState();
-      const token = state.user.userInfo?.token;
-      if (!token) throw new Error("No token found");
-      return await cartService.removeItemFromCart(cartItemId, token);
+      return await cartService.removeItemFromCart(cartItemId);
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message

@@ -3,13 +3,22 @@ const express = require("express");
 const cors = require("cors");
 const db = require("./db");
 const { errorHandler } = require("./middlewares/errorHandler");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
-app.use(cors());
+//app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend url
+    credentials: true, // credentials (cookie)
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(errorHandler);
+app.use(cookieParser());
 
 // Main route
 app.get("/", (req, res) => {

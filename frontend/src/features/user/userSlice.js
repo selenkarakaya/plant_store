@@ -34,12 +34,7 @@ export const fetchUserProfile = createAsyncThunk(
   "user/fetchProfile",
   async (_, thunkAPI) => {
     try {
-      const state = thunkAPI.getState();
-      const token = state.user.userInfo?.token;
-
-      if (!token) throw new Error("No token found");
-
-      return await userService.getProfile(token);
+      return await userService.getProfile();
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message
@@ -53,10 +48,7 @@ export const updateProfile = createAsyncThunk(
   "user/updateProfile",
   async (userData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().user.userInfo?.token;
-
-      if (!token) throw new Error("No token found");
-      return await userService.updateProfile(userData, token);
+      return await userService.updateProfile(userData);
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -70,9 +62,7 @@ export const changePassword = createAsyncThunk(
   "user/changePassword",
   async (passwordData, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().user.userInfo?.token;
-      if (!token) throw new Error("No token found");
-      return await userService.changePassword(passwordData, token);
+      return await userService.changePassword(passwordData);
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || error.message
@@ -80,6 +70,20 @@ export const changePassword = createAsyncThunk(
     }
   }
 );
+
+export const logoutUser = createAsyncThunk(
+  "user/logout",
+  async (_, thunkAPI) => {
+    try {
+      return await userService.logout();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -95,10 +99,6 @@ const userSlice = createSlice({
     passwordError: null,
   },
   reducers: {
-    logout: (state) => {
-      state.userInfo = null;
-      state.profile = null;
-    },
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
@@ -111,7 +111,7 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.userInfo = action.payload;
+        state.userInfo = action.payload.user;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed";
@@ -123,7 +123,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.userInfo = action.payload;
+        state.userInfo = action.payload.user;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
@@ -164,6 +164,15 @@ const userSlice = createSlice({
       .addCase(changePassword.rejected, (state, action) => {
         state.passwordStatus = "failed";
         state.passwordError = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.userInfo = null;
+        state.profile = null;
+        state.status = "idle";
+        state.error = null;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });

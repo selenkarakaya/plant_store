@@ -78,13 +78,22 @@ const loginUser = asyncHandler(async (req, res) => {
     { expiresIn: process.env.JWT_EXPIRES_IN }
   );
 
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // true in prod, false in local
+    sameSite: "lax", // none in prod
+    maxAge: 1000 * 60 * 60 * 24, // 1 gün
+  });
+
   res.json({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-    address: user.address,
-    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      is_admin: user.is_admin,
+    },
   });
 });
 
@@ -170,6 +179,15 @@ const changeUserPassword = asyncHandler(async (req, res) => {
 
   res.json({ message: "Password updated successfully" });
 });
+const logoutUser = (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+  res.json({ message: "Logged out successfully" });
+};
 
 // Export the registerUser function so it can be used in other files
 module.exports = {
@@ -178,4 +196,5 @@ module.exports = {
   getUserProfile,
   updateUserProfile,
   changeUserPassword,
+  logoutUser,
 };
