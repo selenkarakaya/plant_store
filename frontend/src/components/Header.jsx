@@ -12,6 +12,11 @@ const Header = () => {
   const [selectedParent, setSelectedParent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userInfo } = useSelector((state) => state.user);
+  const { cart_items } = useSelector((state) => state.cart);
+  const itemCount = cart_items.reduce(
+    (sum, item) => sum + Number(item.quantity),
+    0
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -46,13 +51,17 @@ const Header = () => {
           ) : (
             <>
               <Link to="/login">
-                {" "}
                 <FiUser title="User" className="hover:text-green-700" />
               </Link>
             </>
           )}
-          <Link to="/shoppingCart">
+          <Link to="/shoppingCart" className="relative inline-block">
             <FiShoppingCart title="Cart" className="hover:text-green-700" />
+            {itemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                {itemCount}
+              </span>
+            )}
           </Link>
         </div>
       </div>
