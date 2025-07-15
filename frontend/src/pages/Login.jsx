@@ -66,6 +66,11 @@ const Login = () => {
           Register
         </Link>
       </p>
+      <a href="http://localhost:5500/auth/google">
+        <button className="bg-red-600 text-white px-4 py-2 rounded">
+          Sign in with Google
+        </button>
+      </a>
     </div>
   );
 };
