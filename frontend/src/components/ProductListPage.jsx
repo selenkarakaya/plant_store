@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchProducts,
@@ -8,6 +8,7 @@ import ProductCard from "./ProductCard";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 import ExpandableText from "../utils/ExpandableText";
+import { paginate } from "../utils/pagination";
 
 const ProductListPage = () => {
   const { categoryId } = useParams();
@@ -31,9 +32,15 @@ const ProductListPage = () => {
     }
   }, [dispatch, categoryId]);
 
-  const displayProducts = categoryId
-    ? products
-    : [...products].sort(() => Math.random() * 10);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 20;
+  const currentItems = paginate(products, currentPage, itemsPerPage);
+
+  //Sayfa değiştiğinde scroll’u en başa al
+  const handlePageChange = (idx) => {
+    setCurrentPage(idx);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -66,8 +73,24 @@ const ProductListPage = () => {
         <ExpandableText text={selectedCategory?.description} limit={120} />
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {displayProducts.map((product) => (
+        {currentItems.map((product) => (
           <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+      {/* Sayfa numaraları */}
+      <div className="flex justify-center space-x-3 mt-6">
+        {[...Array(Math.ceil(products.length / itemsPerPage))].map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => handlePageChange(idx)}
+            className={`px-3 py-1 rounded ${
+              currentPage === idx
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            {idx + 1}
+          </button>
         ))}
       </div>
     </div>

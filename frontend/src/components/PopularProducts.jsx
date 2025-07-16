@@ -1,14 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPopularProducts } from "../features/products/popularSlice";
-import ProductCard from "./ProductCard"; // ayni klasordeyse ./ ile
-import LoadingSpinner from "./LoadingSpinner"; // varsa kullan, yoksa kaldır
+import ProductCard from "./ProductCard";
+import LoadingSpinner from "./LoadingSpinner";
+import { paginate } from "../utils/pagination";
 
 const PopularProducts = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector(
     (state) => state.popularProducts
   );
+
+  // Yeni state: sayfa numarası (0'dan başlar)
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 8; // 1 sayfada 4 ürün göster
+
+  const currentItems = paginate(items, currentPage, itemsPerPage);
 
   useEffect(() => {
     dispatch(fetchPopularProducts());
@@ -35,8 +42,25 @@ const PopularProducts = () => {
         </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {items.map((product) => (
+        {currentItems.map((product) => (
           <ProductCard key={product.id} product={product} isPopular={true} />
+        ))}
+      </div>
+
+      {/* Sayfa numaraları */}
+      <div className="flex justify-center space-x-3 mt-6">
+        {[...Array(Math.ceil(items.length / itemsPerPage))].map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentPage(idx)}
+            className={`px-3 py-1 rounded ${
+              currentPage === idx
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            {idx + 1}
+          </button>
         ))}
       </div>
     </div>
