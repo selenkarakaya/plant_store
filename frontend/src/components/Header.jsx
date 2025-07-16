@@ -39,14 +39,15 @@ const Header = () => {
   return (
     <header className="bg-white shadow p-4 flex flex-col items-center">
       <div className="flex justify-between items-center w-full max-w-5xl px-4 mb-4">
-        <div style={{ width: "100px" }}></div>
-        <Link to="/" className="text-2xl font-bold px-3 py-1">
-          Selen’s Greenery
+        <Link to="/">
+          <img
+            src="https://res.cloudinary.com/de4kodlhk/image/upload/v1752694807/2_ocfxq5.png"
+            alt="Product"
+            className="w-30 h-30 object-cover rounded-full"
+          />
         </Link>
         <div className="flex items-center gap-4 text-gray-700 text-xl cursor-pointer">
-          <FiSearch title="Search" className="hover:text-green-700" />
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
           {userInfo ? (
             <Link to="/me">
               <FiUser title="User" className="hover:text-green-700" />
