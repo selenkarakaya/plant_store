@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, isPopular }) => {
   return (
-    <div className="border rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer">
+    <div className="relative border rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer">
+      {isPopular && (
+        <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold text-white px-2 py-1 rounded shadow-md z-10">
+          Popular
+        </div>
+      )}
       <Link to={`/products/${product.id}`}>
         <img
           src={product.image_url}

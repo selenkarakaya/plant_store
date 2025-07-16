@@ -5,9 +5,11 @@ const {
   getProducts,
   getProductById,
   getProductsByCategory,
+  getPopularProducts,
 } = require("../controllers/productController");
 
 router.get("/", getProducts);
+router.get("/popular", getPopularProducts);
 router.get("/:id", getProductById);
 router.get("/category/:categoryId", getProductsByCategory);
 

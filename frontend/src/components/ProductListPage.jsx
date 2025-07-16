@@ -4,9 +4,9 @@ import {
   fetchProducts,
   fetchProductsByCategory,
 } from "../features/products/productSlice";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "./ProductCard";
 import { useParams } from "react-router-dom";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner";
 import ExpandableText from "../utils/ExpandableText";
 
 const ProductListPage = () => {
@@ -31,12 +31,9 @@ const ProductListPage = () => {
     }
   }, [dispatch, categoryId]);
 
-  const displayProducts = useMemo(() => {
-    if (!categoryId) {
-      return [...products].sort(() => Math.random() - 0.5);
-    }
-    return products;
-  }, [products, categoryId]);
+  const displayProducts = categoryId
+    ? products
+    : [...products].sort(() => Math.random() * 10);
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -62,14 +59,13 @@ const ProductListPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col mx-auto my-10 justify-center items-center w-1/2">
-        {" "}
+      <div className="flex flex-col mx-auto my-5 justify-center items-center w-1/2">
         <h2 className="text-xl font-bold mb-4">
-          {selectedCategory ? selectedCategory.name : "Products"}
+          {selectedCategory && selectedCategory.name}
         </h2>
         <ExpandableText text={selectedCategory?.description} limit={120} />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {displayProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

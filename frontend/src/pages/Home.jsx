@@ -1,12 +1,15 @@
-import ProductListPage from "./ProductListPage";
 import DiscountPopup from "../components/DiscountPopup";
-import Products from "../pages/Products";
+import PopularProducts from "../components/PopularProducts";
+import SlidingParagraphs from "../utils/SlidingParagraphs";
+import MainSidebar from "../components/MainSidebar";
 
 function Home() {
   return (
     <div>
-      <ProductListPage />
+      <SlidingParagraphs />
+      <MainSidebar />
       <DiscountPopup />
+      <PopularProducts />
     </div>
   );
 }

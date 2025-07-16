@@ -21,6 +21,7 @@ const getByCategory = async (categoryId) => {
   const res = await axios.get(`${API_URL}/category/${categoryId}`);
   return res.data;
 };
+
 const productService = {
   getProducts,
   getProductById,

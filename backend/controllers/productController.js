@@ -8,7 +8,8 @@ const getProducts = asyncHandler(async (req, res) => {
     FROM products p
     LEFT JOIN product_variants v ON p.id = v.product_id
     GROUP BY p.id, p.name, p.family, p.description, p.image_url
-
+    ORDER BY RANDOM()
+    LIMIT 6;
   `;
   //LIMIT 10
   const { rows } = await db.query(query);
@@ -50,29 +51,6 @@ const getProductById = asyncHandler(async (req, res) => {
   });
 });
 
-// const getProductsByCategory = asyncHandler(async (req, res) => {
-//   const categoryId = req.params.categoryId;
-
-//   // Querying the product_categories table to get products for the given categoryId
-//   const query = `
-//   SELECT p.id, p.name, p.family, p.description, p.image_url,
-//          MIN(v.price) AS min_price
-//   FROM products p
-//   JOIN product_categories pc ON pc.product_id = p.id
-//   LEFT JOIN product_variants v ON v.product_id = p.id
-//   WHERE pc.category_id = $1
-//   GROUP BY p.id, p.name, p.family, p.description, p.image_url
-// `;
-
-//   const { rows } = await db.query(query, [categoryId]);
-
-//   if (rows.length === 0) {
-//     res.status(404);
-//     throw new Error("No products found for this category");
-//   }
-
-//   res.json(rows);
-// });
 const getProductsByCategory = asyncHandler(async (req, res) => {
   const categoryId = parseInt(req.params.categoryId); // ID olarak al
 
@@ -125,4 +103,42 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
   res.json(rows);
 });
 
-module.exports = { getProducts, getProductById, getProductsByCategory };
+const getPopularProducts = asyncHandler(async (req, res) => {
+  const result = await db.query(`
+  SELECT 
+  p.id,
+  p.name,
+  p.family,
+  p.description,
+  p.image_url,
+  MIN(v.price) AS min_price,
+  pp.total_sold
+FROM 
+  product_popularity pp
+JOIN 
+  products p ON p.id = pp.product_id
+LEFT JOIN 
+  product_variants v ON p.id = v.product_id
+GROUP BY 
+  p.id, p.name, p.family, p.description, p.image_url, pp.total_sold
+ORDER BY 
+  pp.total_sold DESC
+LIMIT 20;
+  `);
+
+  const rows = result.rows;
+
+  if (rows.length === 0) {
+    res.status(404);
+    throw new Error("No popular products found");
+  }
+
+  res.json(rows);
+});
+
+module.exports = {
+  getProducts,
+  getProductById,
+  getProductsByCategory,
+  getPopularProducts,
+};

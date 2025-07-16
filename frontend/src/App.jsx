@@ -10,8 +10,7 @@ import Register from "./pages/Register";
 import UserProfile from "./pages/UserProfile";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PrivateRoute from "./utils/PrivateRoute";
-import ProductListPage from "./pages/ProductListPage";
-import Products from "./pages/ProductListPage";
+import ProductListPage from "./components/ProductListPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
@@ -35,11 +34,6 @@ function App() {
     }
   }, [dispatch, userInfo]);
 
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     alert("Session started successfully!");
-  //   }
-  // }, [userInfo]);
   return (
     <>
       <Router>
@@ -51,10 +45,8 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/me" element={<UserProfile />} />
           </Route>
-
           <Route path="/shoppingCart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/products" element={<Products />} />
           <Route path="/category/:categoryId" element={<ProductListPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
