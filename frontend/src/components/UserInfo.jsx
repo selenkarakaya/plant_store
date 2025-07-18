@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile, changePassword } from "../features/user/userSlice";
-import { FaEdit } from "react-icons/fa";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
@@ -82,38 +81,58 @@ const UserInfo = () => {
   if (!userInfo) return <p>Please log in to view your profile.</p>;
 
   return (
-    <div className="space-y-10">
-      {/* User Info */}
-      <div className="relative p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold text-primary mb-4 flex items-center justify-between">
-          Account settings
-        </h2>
-        <p className="text-xs">{userInfo.name}</p>
-        <p className="text-xs">{userInfo.email}</p>
-        <p className="text-xs">{userInfo.phone || "-"}</p>
-        <p className="text-xs">{userInfo.address || "-"}</p>
+    <main className="space-y-10">
+      {/* Account Section */}
+      <section
+        aria-labelledby="account-settings-heading"
+        className="relative p-6 rounded-lg shadow"
+      >
+        <header className="mb-4 flex items-center justify-between">
+          <h2
+            id="account-settings-heading"
+            className="text-xl font-semibold text-primary"
+          >
+            Account settings
+          </h2>
+        </header>
 
-        <button
-          onClick={() => setShowProfileModal(true)}
-          className="text-gray-600 hover:text-black border-b my-6"
-        >
-          EDIT MY DETAILS
-        </button>
-        <div className="flex-grow h-px bg-gray-300" />
-        <button
-          onClick={() => setShowPasswordModal(true)}
-          className="text-gray-600 hover:text-black border-b my-6"
-        >
-          CHANGE PASSWORD
-        </button>
-        <div className="flex-grow h-px bg-gray-300" />
-      </div>
+        <article className="text-xs space-y-1">
+          <p>{userInfo.name}</p>
+          <p>{userInfo.email}</p>
+          <p>{userInfo.phone || "-"}</p>
+          <p>{userInfo.address || "-"}</p>
+        </article>
+
+        <footer className="mt-6 space-y-6">
+          <button
+            onClick={() => setShowProfileModal(true)}
+            className="text-gray-600 hover:text-black border-b"
+          >
+            EDIT MY DETAILS
+          </button>
+          <div className="h-px bg-gray-300" />
+          <button
+            onClick={() => setShowPasswordModal(true)}
+            className="text-gray-600 hover:text-black border-b"
+          >
+            CHANGE PASSWORD
+          </button>
+          <div className="h-px bg-gray-300" />
+        </footer>
+      </section>
 
       {/* Profile Modal */}
       {showProfileModal && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+        <section
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
+        >
           <div className="bg-white p-6 rounded-lg shadow max-w-2xl w-full relative">
-            <h2 className="text-xl font-bold mb-4">Edit profile</h2>
+            <header>
+              <h2 className="text-xl font-bold mb-4">Edit profile</h2>
+            </header>
+
             <form onSubmit={handleProfileSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="block text-sm font-medium">
@@ -124,7 +143,7 @@ const UserInfo = () => {
                     value={profileData.name}
                     onChange={onProfileChange}
                     required
-                    className="mt-1 w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                    className="mt-1 w-full border p-2 rounded focus:ring-green-800"
                   />
                 </label>
 
@@ -136,29 +155,29 @@ const UserInfo = () => {
                     value={profileData.email}
                     onChange={onProfileChange}
                     required
-                    className="mt-1 w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                    className="mt-1 w-full border p-2 rounded focus:ring-green-800"
                   />
                 </label>
 
-                <label className="block text-sm font-medium sm:col-span-1">
+                <label className="block text-sm font-medium">
                   Phone
                   <input
                     type="text"
                     name="phone"
                     value={profileData.phone}
                     onChange={onProfileChange}
-                    className="mt-1 w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                    className="mt-1 w-full border p-2 rounded focus:ring-green-800"
                   />
                 </label>
 
-                <label className="block text-sm font-medium sm:col-span-1">
+                <label className="block text-sm font-medium">
                   Address
                   <input
                     type="text"
                     name="address"
                     value={profileData.address}
                     onChange={onProfileChange}
-                    className="mt-1 w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                    className="mt-1 w-full border p-2 rounded focus:ring-green-800"
                   />
                 </label>
               </div>
@@ -171,7 +190,7 @@ const UserInfo = () => {
                 <button
                   type="button"
                   onClick={() => setShowProfileModal(false)}
-                  className="px-4 border-b border-green-900 text-green-800 hover:scale-105 cursor-pointer"
+                  className="px-4 border-b border-green-900 text-green-800"
                 >
                   Cancel
                 </button>
@@ -185,14 +204,21 @@ const UserInfo = () => {
               </div>
             </form>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Password Modal */}
       {showPasswordModal && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+        <section
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
+        >
           <div className="bg-white p-6 rounded-lg shadow max-w-md w-full relative">
-            <h2 className="text-xl font-bold mb-4">Change Password</h2>
+            <header>
+              <h2 className="text-xl font-bold mb-4">Change Password</h2>
+            </header>
+
             <form onSubmit={handlePasswordSubmit}>
               <label className="block mb-2">
                 Current Password
@@ -202,7 +228,7 @@ const UserInfo = () => {
                   value={passwordData.currentPassword}
                   onChange={onPasswordChange}
                   required
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                  className="w-full border p-2 rounded focus:ring-green-800"
                 />
               </label>
 
@@ -214,7 +240,7 @@ const UserInfo = () => {
                   value={passwordData.newPassword}
                   onChange={onPasswordChange}
                   required
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                  className="w-full border p-2 rounded focus:ring-green-800"
                 />
               </label>
 
@@ -226,7 +252,7 @@ const UserInfo = () => {
                   value={passwordData.confirmNewPassword}
                   onChange={onPasswordChange}
                   required
-                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-green-800 focus:border-green-800"
+                  className="w-full border p-2 rounded focus:ring-green-800"
                 />
               </label>
 
@@ -238,7 +264,7 @@ const UserInfo = () => {
                 <button
                   type="button"
                   onClick={() => setShowPasswordModal(false)}
-                  className="px-4 border-b border-green-900 text-green-800 hover:scale-105 cursor-pointer"
+                  className="px-4 border-b border-green-900 text-green-800"
                 >
                   Cancel
                 </button>
@@ -252,9 +278,9 @@ const UserInfo = () => {
               </div>
             </form>
           </div>
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 };
 
