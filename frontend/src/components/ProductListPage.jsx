@@ -36,7 +36,6 @@ const ProductListPage = () => {
   const itemsPerPage = 20;
   const currentItems = paginate(products, currentPage, itemsPerPage);
 
-  // Scroll to top when the page changes
   const handlePageChange = (idx) => {
     setCurrentPage(idx);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -45,15 +44,17 @@ const ProductListPage = () => {
   if (status === "loading") {
     return <LoadingSpinner />;
   }
-  if (products.length === 0)
-    return (
-      <div className="text-center text-gray-600 mt-10">
-        <p className="text-xl mb-2">😞 Oops! No plants to show right now.</p>
-        <p>Try checking back later or explore other categories 🌿</p>
-      </div>
-    );
 
-  if (error)
+  if (products.length === 0) {
+    return (
+      <main className="text-center text-gray-600 mt-10">
+        <h1 className="text-xl mb-2">😞 Oops! No plants to show right now.</h1>
+        <p>Try checking back later or explore other categories 🌿</p>
+      </main>
+    );
+  }
+
+  if (error) {
     return (
       <div
         className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md mx-auto mt-6"
@@ -63,23 +64,37 @@ const ProductListPage = () => {
         <span className="block sm:inline">Something went wrong: {error}</span>
       </div>
     );
+  }
 
   return (
-    <div className="my-8 max-w-screen-xl mx-auto">
-      <div className="flex flex-col mx-auto my-5 justify-center items-center w-1/2">
-        <h2 className="text-xl font-bold mb-4">
-          {selectedCategory && selectedCategory.name}
-        </h2>
+    <main className="my-8 max-w-screen-xl mx-auto px-4">
+      {/* Category Info */}
+      <section
+        aria-labelledby="category-title"
+        className="flex flex-col items-center text-center max-w-xl mx-auto mb-10"
+      >
+        <h1 id="category-title" className="text-2xl font-bold mb-4">
+          {selectedCategory?.name}
+        </h1>
         <ExpandableText text={selectedCategory?.description} limit={120} />
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      </section>
+
+      {/* Product Grid */}
+      <section
+        aria-label="Product list"
+        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+      >
         {currentItems.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </div>
-      {/* Page numbers */}
+      </section>
+
+      {/* Pagination */}
       {Math.ceil(products.length / itemsPerPage) > 1 && (
-        <div className="flex justify-center space-x-3 mt-6">
+        <nav
+          className="flex justify-center space-x-3 mt-6"
+          aria-label="Pagination"
+        >
           {[...Array(Math.ceil(products.length / itemsPerPage))].map(
             (_, idx) => (
               <button
@@ -90,14 +105,15 @@ const ProductListPage = () => {
                     ? "bg-primary text-white"
                     : "bg-gray-200 text-gray-700"
                 }`}
+                aria-current={currentPage === idx ? "page" : undefined}
               >
                 {idx + 1}
               </button>
             )
           )}
-        </div>
+        </nav>
       )}
-    </div>
+    </main>
   );
 };
 
