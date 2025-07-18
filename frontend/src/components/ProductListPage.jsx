@@ -36,7 +36,7 @@ const ProductListPage = () => {
   const itemsPerPage = 20;
   const currentItems = paginate(products, currentPage, itemsPerPage);
 
-  //Sayfa değiştiğinde scroll’u en başa al
+  // Scroll to top when the page changes
   const handlePageChange = (idx) => {
     setCurrentPage(idx);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -65,34 +65,38 @@ const ProductListPage = () => {
     );
 
   return (
-    <div>
+    <div className="my-8 max-w-screen-xl mx-auto">
       <div className="flex flex-col mx-auto my-5 justify-center items-center w-1/2">
         <h2 className="text-xl font-bold mb-4">
           {selectedCategory && selectedCategory.name}
         </h2>
         <ExpandableText text={selectedCategory?.description} limit={120} />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {currentItems.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      {/* Sayfa numaraları */}
-      <div className="flex justify-center space-x-3 mt-6">
-        {[...Array(Math.ceil(products.length / itemsPerPage))].map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => handlePageChange(idx)}
-            className={`px-3 py-1 rounded ${
-              currentPage === idx
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            {idx + 1}
-          </button>
-        ))}
-      </div>
+      {/* Page numbers */}
+      {Math.ceil(products.length / itemsPerPage) > 1 && (
+        <div className="flex justify-center space-x-3 mt-6">
+          {[...Array(Math.ceil(products.length / itemsPerPage))].map(
+            (_, idx) => (
+              <button
+                key={idx}
+                onClick={() => handlePageChange(idx)}
+                className={`px-3 py-1 rounded ${
+                  currentPage === idx
+                    ? "bg-primary text-white"
+                    : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {idx + 1}
+              </button>
+            )
+          )}
+        </div>
+      )}
     </div>
   );
 };

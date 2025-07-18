@@ -17,10 +17,8 @@ function MainSidebar() {
   };
   return (
     <div>
-      <div className="flex justify-between items-center gap-x-4 max-w-screen-xl mx-auto">
-        <div className="w-[60%]">
-          <ProductListPage />
-        </div>
+      <div className="flex justify-between items-center gap-x-4 max-w-screen-xl mx-auto my-4">
+        <div className="w-[60%] h-[40rem] flex items-end bg-[url('https://res.cloudinary.com/de4kodlhk/image/upload/v1752694832/Green_and_White_Simple_Plant_Shop_Instagram_Post_2_bzjbdc.png')] bg-cover bg-center"></div>
         <div className="w-[35%]">
           <h1 className="font-semibold my-2">
             Indoor Plants — Making Your Home Look Like a Jungle 🪴🌿

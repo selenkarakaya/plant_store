@@ -9,7 +9,7 @@ const getProducts = asyncHandler(async (req, res) => {
     LEFT JOIN product_variants v ON p.id = v.product_id
     GROUP BY p.id, p.name, p.family, p.description, p.image_url
     ORDER BY RANDOM()
-    LIMIT 6;
+    LIMIT 3;
   `;
   //LIMIT 10
   const { rows } = await db.query(query);
@@ -44,10 +44,16 @@ const getProductById = asyncHandler(async (req, res) => {
   );
   const variants = variantsRes.rows;
 
+  const categoriesRes = await db.query(
+    "SELECT * FROM product_categories Where product_id =$1",
+    [productId]
+  );
+  const categories = categoriesRes.rows;
   res.json({
     ...product,
     plant_details: details,
     product_variants: variants,
+    product_categories: categories,
   });
 });
 

@@ -11,9 +11,8 @@ const PopularProducts = () => {
     (state) => state.popularProducts
   );
 
-  // Yeni state: sayfa numarası (0'dan başlar)
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 8; // 1 sayfada 4 ürün göster
+  const itemsPerPage = 8;
 
   const currentItems = paginate(items, currentPage, itemsPerPage);
 
@@ -55,7 +54,7 @@ const PopularProducts = () => {
             onClick={() => setCurrentPage(idx)}
             className={`px-3 py-1 rounded ${
               currentPage === idx
-                ? "bg-green-600 text-white"
+                ? "bg-primary text-white"
                 : "bg-gray-200 text-gray-700"
             }`}
           >
