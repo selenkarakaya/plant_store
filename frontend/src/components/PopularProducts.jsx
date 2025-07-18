@@ -23,15 +23,22 @@ const PopularProducts = () => {
   if (loading) return <LoadingSpinner />;
   if (error)
     return (
-      <div className="text-red-500 text-center mt-4">
+      <section
+        aria-live="assertive"
+        className="text-red-500 text-center mt-4"
+        role="alert"
+      >
         Error loading popular products: {error}
-      </div>
+      </section>
     );
 
   return (
-    <div className="my-8 max-w-screen-xl mx-auto">
-      <div className="flex flex-col w-1/2 justify-center items-center mx-auto my-4">
-        <h1 className="text-xl font-bold mb-4">
+    <section
+      className="my-8 max-w-screen-xl mx-auto"
+      aria-labelledby="popular-products-heading"
+    >
+      <header className="flex flex-col w-1/2 justify-center items-center mx-auto my-4">
+        <h1 id="popular-products-heading" className="text-xl font-bold mb-4">
           Popular Houseplants & Indoor Plants
         </h1>
         <p>
@@ -39,19 +46,26 @@ const PopularProducts = () => {
           greens, all in stock and ready for fast UK delivery! Bring life,
           freshness, and a splash of nature into your home today 🌿✨
         </p>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {currentItems.map((product) => (
-          <ProductCard key={product.id} product={product} isPopular={true} />
-        ))}
-      </div>
+      </header>
 
-      {/* Sayfa numaraları */}
-      <div className="flex justify-center space-x-3 mt-6">
+      <ul className="grid grid-cols-2 md:grid-cols-4 gap-4" role="list">
+        {currentItems.map((product) => (
+          <li key={product.id}>
+            <ProductCard product={product} isPopular={true} />
+          </li>
+        ))}
+      </ul>
+
+      {/* Pagination */}
+      <nav
+        aria-label="Popular products pagination"
+        className="flex justify-center space-x-3 mt-6"
+      >
         {[...Array(Math.ceil(items.length / itemsPerPage))].map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentPage(idx)}
+            aria-current={currentPage === idx ? "page" : undefined}
             className={`px-3 py-1 rounded ${
               currentPage === idx
                 ? "bg-primary text-white"
@@ -61,8 +75,8 @@ const PopularProducts = () => {
             {idx + 1}
           </button>
         ))}
-      </div>
-    </div>
+      </nav>
+    </section>
   );
 };
 
