@@ -2,21 +2,33 @@ function OrderDetails({ order }) {
   if (!order || !order.items) return null;
 
   return (
-    <div className="space-y-2">
+    <section
+      aria-label="Order items"
+      className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+    >
       {order.items.map((item) => (
-        <div key={item.order_item_id} className="border p-2 rounded">
-          <p>Product: {item.product_name}</p>
-          <p>Quantity: {item.quantity}</p>
-          <p>Price: £{item.unit_price}</p>
-          <p>Total Price: £{item.total_price}</p>
-          <p>created date : {order.order.created_at}</p>
+        <article
+          key={item.order_item_id}
+          className="flex gap-3 items-start p-3 border rounded-lg shadow-sm"
+        >
           <img
             src={item.image_url}
+            alt={item.product_name}
             className="w-20 h-20 object-cover rounded"
           />
-        </div>
+          <div className="space-y-1">
+            <h3 className="text-sm font-medium">{item.product_name}</h3>
+            <p className="text-sm text-gray-700">
+              Unit price: £{item.unit_price}
+            </p>
+            <p className="text-sm text-gray-700">Quantity: {item.quantity}</p>
+            <p className="text-sm text-gray-900 font-semibold">
+              Total: £{item.total_price}
+            </p>
+          </div>
+        </article>
       ))}
-    </div>
+    </section>
   );
 }
 

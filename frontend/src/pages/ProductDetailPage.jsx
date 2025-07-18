@@ -106,9 +106,6 @@ const ProductDetailPage = () => {
                   <p className="text-sm text-gray-600">
                     {variant.internal_pot_diameter || "N/A"}
                   </p>
-                  <p className="text-sm text-gray-600">
-                    Stock: {variant.stock}
-                  </p>
                   <p className="text-lg font-bold mt-2">£{variant.price}</p>
                 </button>
               ))}
