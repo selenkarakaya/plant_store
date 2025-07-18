@@ -26,52 +26,90 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded">
-      <h2 className="text-2xl font-bold mb-6">Login</h2>
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-      <form onSubmit={onSubmit}>
-        <label className="block mb-2">
-          Email
+    <main
+      className="max-w-lg h-[35rem] flex flex-col justify-center mx-auto mt-10 p-6 border border-terracotta rounded"
+      role="main"
+    >
+      <header>
+        <h1 className="text-2xl text-center font-bold mb-6">Sign in</h1>
+      </header>
+
+      {error && (
+        <p className="text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
+      <section className="mb-4">
+        <a href="http://localhost:5500/auth/google">
+          <button
+            type="button"
+            className="w-full bg-brown text-white px-4 py-2 rounded-lg"
+          >
+            Sign in with Google
+          </button>
+        </a>
+      </section>
+
+      <div className="flex items-center text-gray-500 my-4" aria-hidden="true">
+        <div className="flex-grow h-px bg-gray-300" />
+        <span className="px-4 text-sm">or</span>
+        <div className="flex-grow h-px bg-gray-300" />
+      </div>
+
+      <form onSubmit={onSubmit} aria-label="Login Form">
+        <div className="mb-4">
+          <label htmlFor="email" className="sr-only">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             name="email"
+            placeholder="Email"
             value={email}
             onChange={onChange}
             required
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded-lg"
           />
-        </label>
-        <label className="block mb-4">
-          Password
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             name="password"
+            placeholder="Password"
             value={password}
             onChange={onChange}
             required
             className="w-full border p-2 rounded"
           />
-        </label>
+        </div>
+
         <button
           type="submit"
-          disabled={status === "loading"}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          disabled={!email || !password || status === "loading"}
+          className={`w-full p-2 rounded text-white transition 
+  ${
+    !email || !password || status === "loading"
+      ? "bg-primary/50 cursor-not-allowed"
+      : "bg-primary hover:opacity-100"
+  }`}
         >
-          {status === "loading" ? "Loading.." : "Login"}
+          {status === "loading" ? "Loading..." : "Continue"}
         </button>
       </form>
-      <p className="mt-4 text-sm text-center">
-        Don’t have an account?{" "}
-        <Link to="/register" className="text-green-700 hover:underline">
+
+      <footer className="mt-4 text-sm text-center">
+        Don’t have an account?
+        <Link to="/register" className="text-green-800 hover:underline">
           Register
         </Link>
-      </p>
-      <a href="http://localhost:5500/auth/google">
-        <button className="bg-red-600 text-white px-4 py-2 rounded">
-          Sign in with Google
-        </button>
-      </a>
-    </div>
+      </footer>
+    </main>
   );
 };
 

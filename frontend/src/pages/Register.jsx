@@ -36,77 +36,114 @@ function Register() {
       navigate("/");
     }
   }, [userInfo, navigate]);
+
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded">
-      <h2 className="text-2xl font-bold mb-6">Register</h2>
+    <main className="max-w-md mx-auto mt-10 p-6 border rounded" role="main">
+      <header>
+        <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
+      </header>
 
-      {/* Hata mesajı */}
-      {error && <p className="text-red-600 mb-4">{error}</p>}
+      {error && (
+        <p className="text-red-600 mb-4" role="alert">
+          {error}
+        </p>
+      )}
 
-      <form onSubmit={onSubmit}>
-        <label className="block mb-2">
-          Name
+      <form onSubmit={onSubmit} aria-label="Register Form">
+        <div className="mb-4">
+          <label htmlFor="name" className="sr-only">
+            Name
+          </label>
           <input
+            id="name"
             type="text"
             name="name"
+            placeholder="Name"
             value={name}
             onChange={onChange}
             required
             className="w-full border p-2 rounded"
           />
-        </label>
+        </div>
 
-        <label className="block mb-2">
-          Email
+        <div className="mb-4">
+          <label htmlFor="email" className="sr-only">
+            Email
+          </label>
           <input
+            id="email"
             type="email"
             name="email"
+            placeholder="Email"
             value={email}
             onChange={onChange}
             required
             className="w-full border p-2 rounded"
           />
-        </label>
+        </div>
 
-        <label className="block mb-2">
-          Password
+        <div className="mb-4">
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
           <input
+            id="password"
             type="password"
             name="password"
+            placeholder="Password"
             value={password}
             onChange={onChange}
             required
             className="w-full border p-2 rounded"
           />
-        </label>
+        </div>
 
-        <label className="block mb-4">
-          Confirm Password
+        <div className="mb-6">
+          <label htmlFor="confirmPassword" className="sr-only">
+            Confirm Password
+          </label>
           <input
+            id="confirmPassword"
             type="password"
             name="confirmPassword"
+            placeholder="Confirm Password"
             value={confirmPassword}
             onChange={onChange}
             required
             className="w-full border p-2 rounded"
           />
-        </label>
+        </div>
 
         <button
           type="submit"
-          disabled={status === "loading"}
-          className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700"
+          disabled={
+            status === "loading" ||
+            !name ||
+            !email ||
+            !password ||
+            !confirmPassword
+          }
+          className={`w-full p-2 rounded text-white transition ${
+            status === "loading" ||
+            !name ||
+            !email ||
+            !password ||
+            !confirmPassword
+              ? "bg-primary/50 cursor-not-allowed"
+              : "bg-primary hover:opacity-100"
+          }`}
         >
           {status === "loading" ? "Registering..." : "Register"}
         </button>
       </form>
-      <p className="mt-4 text-sm text-center">
+
+      <footer className="mt-4 text-sm text-center">
         Already have an account?{" "}
-        <Link to="/login" className="text-green-700 hover:underline">
+        <Link to="/login" className="text-green-800 hover:underline">
           Login
         </Link>
-      </p>
-    </div>
+      </footer>
+    </main>
   );
 }
 
