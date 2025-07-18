@@ -2,11 +2,15 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, isPopular }) => {
   return (
-    <div className="relative border border-terracotta rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer">
+    <article className="relative border border-terracotta rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer">
       {isPopular && (
-        <div className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold text-white px-2 py-1 rounded shadow-md z-10">
+        <span
+          className="absolute top-2 left-2 bg-yellow-400 text-xs font-bold text-white px-2 py-1 rounded shadow-md z-10"
+          aria-label="Popular product"
+          role="note"
+        >
           Popular
-        </div>
+        </span>
       )}
       <Link to={`/products/${product.id}`}>
         <img
@@ -18,7 +22,7 @@ const ProductCard = ({ product, isPopular }) => {
         <p className="text-gray-500">{product.family}</p>
         <p>From £{parseFloat(product.min_price)?.toFixed(2) || "N/A"}</p>
       </Link>
-    </div>
+    </article>
   );
 };
 
