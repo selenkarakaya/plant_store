@@ -55,10 +55,15 @@ const cartSlice = createSlice({
   initialState: {
     cart: null,
     cart_items: [],
+    shippingMethod: "standard",
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setShippingMethod: (state, action) => {
+      state.shippingMethod = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addToCart.pending, (state) => {
@@ -136,4 +141,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { setShippingMethod } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -35,6 +35,7 @@ app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/categories", require("./routes/categoryRoutes"));
+app.use("/api/coupon", require("./routes/couponRoutes"));
 
 const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {

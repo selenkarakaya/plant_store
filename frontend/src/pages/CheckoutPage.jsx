@@ -10,14 +10,11 @@ const CheckoutPage = () => {
     (state) => state.orders
   );
   const userInfo = useSelector((state) => state.user.userInfo);
-  console.log(userInfo.email);
-  const [email, setEmail] = useState(userInfo?.email || "");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [shippingMethod, setShippingMethod] = useState("standard");
+  const [address, setAddress] = useState(userInfo?.address || "");
+  const [phone, setPhone] = useState(userInfo?.phone || "");
   const [paymentMethod, setPaymentMethod] = useState("mock_card");
   const [couponCode, setCouponCode] = useState("");
-  const [couponError, setCouponError] = useState("");
+  const shippingMethod = useSelector((state) => state.cart.shippingMethod);
 
   useEffect(() => {
     // Sepeti sayfa yüklenince çek
@@ -25,28 +22,27 @@ const CheckoutPage = () => {
     dispatch(resetCheckoutStatus());
   }, [dispatch]);
 
-  const subtotal = cart_items.reduce(
+  const subtotal = cart_items?.reduce(
     (sum, item) => sum + Number(item.total_price),
     0
   );
-  const shippingFee = shippingMethod === "express" ? 50 : 20;
-  // Burada kupon doğrulama yok, sadece mock olarak indirimi sıfır kabul ediyoruz.
-  const discount = 0;
-  const totalAmount = subtotal + shippingFee - discount;
+  const discount = Number(cart?.discount_amount || 0);
 
-  const handleApplyCoupon = () => {
-    if (!couponCode.trim()) {
-      setCouponError("Please enter a coupon code");
-      return;
-    }
-    // Mock: Kupon doğrulama backend ile entegre edilebilir
-    setCouponError("");
-    alert(`Coupon "${couponCode}" applied (mock)`);
-  };
+  let shippingFee = 0;
+  if (shippingMethod === "express") {
+    shippingFee = subtotal >= 60 ? 5.99 : 7.99;
+  } else if (shippingMethod === "standard") {
+    shippingFee = subtotal >= 60 ? 0 : 5.99;
+  } else {
+    shippingFee = 0;
+  }
+  console.log("subtotal:", subtotal);
+  console.log("shippingMethod:", shippingMethod);
+  // 💰 Toplam Tutar:
+  const totalAmount = subtotal + shippingFee - discount;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!address.trim()) {
       alert("Please enter your shipping address");
       return;
@@ -55,7 +51,6 @@ const CheckoutPage = () => {
       alert("Please enter your phone number");
       return;
     }
-
     const orderData = {
       shipping_address: address,
       shipping_method: shippingMethod,
@@ -71,13 +66,12 @@ const CheckoutPage = () => {
       {/* Left side: User info & form */}
       <form onSubmit={handleSubmit} className="flex-1 max-w-md space-y-6">
         <h2 className="text-2xl font-bold mb-4">Shipping & Payment Details</h2>
-
         <div>
           <label className="block mb-1 font-semibold">Email</label>
           <input
             type="email"
             readOnly
-            value={userInfo.email}
+            value={userInfo?.email || ""}
             className="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
           />
         </div>
@@ -92,7 +86,6 @@ const CheckoutPage = () => {
             required
           />
         </div>
-
         <div>
           <label className="block mb-1 font-semibold">Phone Number</label>
           <input
@@ -102,18 +95,6 @@ const CheckoutPage = () => {
             className="w-full border rounded px-3 py-2"
             required
           />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">Shipping Method</label>
-          <select
-            value={shippingMethod}
-            onChange={(e) => setShippingMethod(e.target.value)}
-            className="w-full border rounded px-3 py-2"
-          >
-            <option value="standard">Standard Delivery (20£)</option>
-            <option value="express">Express Delivery (50£)</option>
-          </select>
         </div>
 
         <div>
@@ -131,7 +112,7 @@ const CheckoutPage = () => {
         <button
           type="submit"
           disabled={checkoutStatus === "loading"}
-          className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700"
+          className="bg-primary text-white px-6 py-3 rounded-3xl hover:bg-green-800"
         >
           {checkoutStatus === "loading" ? "Processing..." : "Place Order"}
         </button>
@@ -151,39 +132,12 @@ const CheckoutPage = () => {
       <div className="w-96 bg-gray-50 p-6 rounded shadow">
         <h2 className="text-xl font-bold mb-4">Order Summary</h2>
 
-        {/* Kupon alanı */}
-        <div className="mb-4">
-          <label htmlFor="coupon" className="block mb-1 font-semibold">
-            Discount code or gift card
-          </label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              id="coupon"
-              className="flex-1 border rounded p-2"
-              value={couponCode}
-              onChange={(e) => setCouponCode(e.target.value)}
-              placeholder="Enter your code"
-            />
-            <button
-              onClick={handleApplyCoupon}
-              type="button"
-              className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700"
-            >
-              Apply
-            </button>
-          </div>
-          {couponError && (
-            <p className="text-red-600 mt-1 text-sm">{couponError}</p>
-          )}
-        </div>
-
         {/* Sipariş ürünleri */}
         <div className="max-h-56 overflow-y-auto space-y-4 mb-4">
           {cart_items.map((item) => (
             <div key={item.id} className="flex gap-4 items-center">
               <img
-                src={item.image_url || "/placeholder.png"} // Backend'den image_url gelmeli
+                src={item.product_image_url || "/placeholder.png"} // Backend'den image_url gelmeli
                 alt={item.variant_name}
                 className="w-16 h-16 object-cover rounded"
               />
@@ -211,11 +165,15 @@ const CheckoutPage = () => {
           </div>
           <div className="flex justify-between">
             <span>Delivery</span>
-            <span>{shippingMethod === "express" ? "£50" : "£20"}</span>
+            <p> £{shippingFee.toFixed(2)}</p>
           </div>
           <div className="flex justify-between">
-            <span>Discount</span>
-            <span>£{discount.toFixed(2)}</span>
+            {discount > 0 && (
+              <>
+                <span>Discount</span>
+                <span>-£{discount.toFixed(2)}</span>
+              </>
+            )}
           </div>
           <div className="flex justify-between font-bold text-lg border-t pt-2">
             <span>Total</span>
