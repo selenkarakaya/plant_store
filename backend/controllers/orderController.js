@@ -38,7 +38,16 @@ const checkoutOrder = asyncHandler(async (req, res) => {
     (sum, item) => sum + parseFloat(item.total_price),
     0
   );
-  const shippingFee = shipping_method === "express" ? 50 : 20;
+  let shippingFee = 0;
+  if (shipping_method === "express") {
+    shippingFee = subtotal >= 60 ? 5.99 : 7.99;
+  } else if (shipping_method === "standard") {
+    shippingFee = subtotal >= 60 ? 0 : 5.99;
+  } else {
+    res.status(400);
+    throw new Error("Invalid shipping method");
+  }
+
   const discount = cart.discount_amount || 0;
   const totalAmount = subtotal + shippingFee - discount;
 

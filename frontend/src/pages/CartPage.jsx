@@ -73,16 +73,17 @@ const CartPage = () => {
             <p className="text-gray-500">Your cart is currently empty.</p>
           ) : (
             cart_items.map((item) => (
-              <Link
-                to={`/products/${item.product_id}`}
+              <article
                 key={item.id}
                 className="flex justify-between items-center p-4 mb-4 border rounded"
               >
-                <img
-                  src={item.product_image_url}
-                  alt={`Image of ${item.product_name}`}
-                  className="w-24 h-24 object-cover rounded"
-                />
+                <Link to={`/products/${item.product_id}`}>
+                  <img
+                    src={item.product_image_url}
+                    alt={`Image of ${item.product_name}`}
+                    className="w-24 h-24 object-cover rounded"
+                  />
+                </Link>
 
                 <div className="flex flex-col flex-grow ml-4">
                   <h3 className="font-semibold">{item.product_name}</h3>
@@ -152,7 +153,7 @@ const CartPage = () => {
                     <FaTrash size={20} />
                   </button>
                 </div>
-              </Link>
+              </article>
             ))
           )}
         </section>

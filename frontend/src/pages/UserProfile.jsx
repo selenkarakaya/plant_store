@@ -20,7 +20,7 @@ const ProfilePage = () => {
 
   return (
     <main
-      className="flex flex-col md:flex-row max-w-5xl mx-auto mt-10 p-6 gap-6 shadow rounded"
+      className="flex flex-col md:flex-row md:items-center max-w-5xl mx-auto mt-10 p-6 gap-6 shadow rounded"
       role="main"
     >
       {/* Navigation - Tabs */}

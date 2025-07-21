@@ -25,7 +25,7 @@ const AccordionItem = ({ title, children }) => {
 
 const CareInfoAccordion = () => {
   return (
-    <div className="max-w-3xl mx-auto p-4 bg-white rounded shadow-md">
+    <div className="w-full mx-auto my-2 p-4 bg-white rounded shadow-md">
       <AccordionItem title="Care Instructions">
         <p>
           Each houseplant requires different levels of care so every order is

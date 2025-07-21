@@ -42,7 +42,7 @@ const ProductDetailPage = () => {
     <main className="max-w-screen-xl mx-auto px-4 py-8">
       <article className="flex flex-col md:flex-row gap-6">
         {/* Product image */}
-        <figure className="md:w-1/2 lg:w-2/3 md:sticky md:top-20 self-start">
+        <figure className="md:w-1/2 lg:w-2/5 md:sticky md:top-20 self-start">
           <img
             src={selectedProduct.image_url}
             alt={selectedProduct.name}
@@ -53,7 +53,7 @@ const ProductDetailPage = () => {
 
         {/* Product details */}
         <section
-          className="md:w-1/2 lg:w-1/3 flex flex-col"
+          className="md:w-1/2 lg:w-3/5 flex flex-col"
           aria-labelledby="product-title"
         >
           <header className="mb-4">
@@ -208,7 +208,6 @@ const ProductDetailPage = () => {
           >
             Add to Cart
           </button>
-
           <CareInfoAccordion />
         </section>
       </article>

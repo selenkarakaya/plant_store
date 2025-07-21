@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function OrderDetails({ order }) {
   if (!order || !order.items) return null;
 
@@ -24,6 +26,7 @@ function OrderDetails({ order }) {
             <p className="text-sm text-gray-700">Quantity: {item.quantity}</p>
             <p className="text-sm text-gray-900 font-semibold">
               Total: £{item.total_price}
+              {item.order_item_id}
             </p>
           </div>
         </article>
