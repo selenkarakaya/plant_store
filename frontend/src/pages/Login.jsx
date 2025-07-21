@@ -33,12 +33,6 @@ const Login = () => {
       <header>
         <h1 className="text-2xl text-center font-bold mb-6">Sign in</h1>
       </header>
-
-      {error && (
-        <p className="text-red-600 mb-4" role="alert">
-          {error}
-        </p>
-      )}
       <section className="mb-4">
         <a href="http://localhost:5500/auth/google">
           <button

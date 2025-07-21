@@ -16,7 +16,7 @@ const Header = () => {
   const { cart_items } = useSelector((state) => state.cart);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const itemCount = cart_items.reduce(
+  const itemCount = cart_items?.reduce(
     (sum, item) => sum + Number(item.quantity),
     0
   );
@@ -25,7 +25,9 @@ const Header = () => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  const parentCategories = categories.filter((cat) => cat.parent_id === null);
+  const parentCategories = Array.isArray(categories)
+    ? categories.filter((cat) => cat.parent_id === null)
+    : [];
 
   const openModal = (cat) => {
     setSelectedParent(cat);
@@ -81,16 +83,17 @@ const Header = () => {
       {/* Category Navigation */}
       <nav className="mt-4 px-4">
         <ul className="flex flex-wrap justify-center gap-4">
-          {parentCategories.map((cat) => (
-            <li key={cat.id}>
-              <button
-                onClick={() => openModal(cat)}
-                className="text-sm font-medium hover:text-green-700"
-              >
-                {cat.name}
-              </button>
-            </li>
-          ))}
+          {Array.isArray(parentCategories) &&
+            parentCategories.map((cat) => (
+              <li key={cat.id}>
+                <button
+                  onClick={() => openModal(cat)}
+                  className="text-sm font-medium hover:text-green-700"
+                >
+                  {cat.name}
+                </button>
+              </li>
+            ))}
         </ul>
       </nav>
 
