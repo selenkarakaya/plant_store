@@ -8,8 +8,10 @@ const SearchBar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (term.trim() !== "") {
-      navigate(`/search?q=${encodeURIComponent(term.trim())}`);
+    const trimmed = term.trim();
+    if (trimmed !== "") {
+      navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+      setTerm("");
     }
   };
 
@@ -20,7 +22,7 @@ const SearchBar = () => {
         placeholder="Search plants..."
         value={term}
         onChange={(e) => setTerm(e.target.value)}
-        className="border px-3 py-1 rounded text-sm"
+        className="border px-3 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-0"
       />
       <button
         type="submit"

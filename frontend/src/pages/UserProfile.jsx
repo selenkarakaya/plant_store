@@ -20,17 +20,18 @@ const ProfilePage = () => {
 
   return (
     <main
-      className="flex justify-between items-center max-w-3/4 mx-auto mt-10 p-6 gap-x-4 shadow rounded"
+      className="flex flex-col md:flex-row max-w-5xl mx-auto mt-10 p-6 gap-6 shadow rounded"
       role="main"
     >
+      {/* Navigation - Tabs */}
       <nav
-        className="flex flex-col gap-4 font-semibold "
+        className="flex md:flex-col justify-center md:justify-start gap-4 font-semibold w-full md:w-1/4"
         aria-label="User tabs"
       >
         <button
           onClick={() => setSelectedTab("profile")}
           aria-current={selectedTab === "profile" ? "page" : undefined}
-          className={`px-2 py-2 rounded-md cursor-pointer ${
+          className={`px-4 py-2 rounded-md cursor-pointer w-full md:w-auto text-center ${
             selectedTab === "profile"
               ? "bg-terracotta text-white"
               : "bg-gray-200 text-gray-700 border border-terracotta"
@@ -41,7 +42,7 @@ const ProfilePage = () => {
         <button
           onClick={() => setSelectedTab("orders")}
           aria-current={selectedTab === "orders" ? "page" : undefined}
-          className={`px-4 py-2 rounded-md cursor-pointer ${
+          className={`px-4 py-2 rounded-md cursor-pointer w-full md:w-auto text-center ${
             selectedTab === "orders"
               ? "bg-terracotta text-white"
               : "bg-gray-200 text-gray-700 border border-terracotta"
@@ -51,13 +52,14 @@ const ProfilePage = () => {
         </button>
         <button
           onClick={handleLogout}
-          className="text-terracotta font-bold border-b border-terracotta px-4 py-2 hover:scale-105 cursor-pointer"
+          className="text-terracotta font-bold border-b border-terracotta px-4 py-2 hover:scale-105 cursor-pointer w-full md:w-auto text-center"
         >
           Logout
         </button>
       </nav>
 
-      <section aria-labelledby="profile-heading" className="w-3/4">
+      {/* Content Section */}
+      <section aria-labelledby="profile-heading" className="w-full md:w-3/4">
         {selectedTab === "profile" && <UserInfo />}
         {selectedTab === "orders" && <UserOrders />}
       </section>

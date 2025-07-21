@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,84 +19,80 @@ const ProductDetailPage = () => {
     (state) => state.products
   );
 
-  // Fetch product by id when component mounts or id changes
   useEffect(() => {
     if (id) {
       dispatch(fetchProductById(id));
     }
-    // Clear selected product on component unmount
     return () => {
       dispatch(clearSelectedProduct());
     };
   }, [dispatch, id]);
 
-  // Find the selected variant object from product variants
   const selectedVariant = selectedProduct?.product_variants?.find(
     (variant) => variant.id === selectedVariantId
   );
 
-  // Extract plant details for display
   const selectedDetails = selectedProduct?.plant_details;
 
-  // Handle loading, error, and not found states
   if (status === "loading") return <LoadingSpinner />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="text-red-600">Error: {error}</p>;
   if (!selectedProduct) return <p>Product not found.</p>;
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
       <article className="flex flex-col md:flex-row gap-6">
         {/* Product image */}
-        <figure className="md:w-2/3 sticky top-20 self-start">
+        <figure className="md:w-1/2 lg:w-2/3 md:sticky md:top-20 self-start">
           <img
             src={selectedProduct.image_url}
             alt={selectedProduct.name}
-            className="w-full h-[36rem] rounded mb-4"
+            className="w-full h-[28rem] sm:h-[36rem] object-cover rounded mb-4"
+            loading="lazy"
           />
         </figure>
 
-        {/* Product details section */}
-        <section className="md:w-2/3" aria-labelledby="product-title">
+        {/* Product details */}
+        <section
+          className="md:w-1/2 lg:w-1/3 flex flex-col"
+          aria-labelledby="product-title"
+        >
           <header className="mb-4">
-            {/* Product name */}
             <h1
               id="product-title"
               className="text-2xl font-bold text-green-800"
             >
               {selectedProduct.name}
             </h1>
-            {/* Product family */}
             <p className="text-sm text-gray-500">{selectedProduct.family}</p>
           </header>
 
-          {/* Product description */}
           <p className="mb-4">{selectedProduct.description}</p>
-          {/* Show rare plant badge if category id 42 exists */}
+
           {selectedProduct?.product_categories?.some(
             (cat) => cat.category_id === 42
           ) && (
             <aside
               className="inline-block px-3 py-1 text-sm bg-purple-100 text-purple-800 rounded-full mb-4"
               aria-label="Rare Plant Badge"
+              role="note"
             >
               <p>🌟 RARE PLANT</p>
               <p>You're lucky you found me!</p>
             </aside>
           )}
 
-          {/* Variants selection section */}
+          {/* Variants */}
           <section aria-labelledby="variant-heading" className="mb-6">
             <h2 id="variant-heading" className="text-lg font-semibold mb-2">
               Plant height & pot size
             </h2>
 
-            {/* List all product variants as buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {selectedProduct.product_variants.map((variant) => (
                 <button
                   key={variant.id}
                   onClick={() => setSelectedVariantId(variant.id)}
-                  className={`text-left border-2 rounded-lg p-4 shadow-sm transition hover:shadow-md ${
+                  className={`text-left border-2 rounded-lg p-4 shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-600 ${
                     selectedVariantId === variant.id
                       ? "border-primary bg-secondary"
                       : "border-gray-300"
@@ -113,7 +109,7 @@ const ProductDetailPage = () => {
             </div>
           </section>
 
-          {/* Stock status message */}
+          {/* Stock Status */}
           {selectedVariant && (
             <p
               className={`mb-4 text-sm text-gray-700 px-4 py-2 rounded text-center ${
@@ -122,6 +118,7 @@ const ProductDetailPage = () => {
                   : "bg-brown text-red-50"
               }`}
               role="status"
+              aria-live="polite"
             >
               {selectedVariant.stock <= 5
                 ? "Almost sold out! 🚨 | EXPRESS DELIVERY"
@@ -133,7 +130,7 @@ const ProductDetailPage = () => {
             </p>
           )}
 
-          {/* Additional plant information */}
+          {/* Additional Plant Info */}
           <aside
             className="mt-4 p-4 bg-green-50 border-l-4 border-green-400 text-green-800 rounded"
             aria-label="Additional plant information"
@@ -141,65 +138,52 @@ const ProductDetailPage = () => {
             <p>{selectedDetails?.additional_info}</p>
           </aside>
 
-          {/* Botanical details section */}
+          {/* Botanical Details */}
           <section
-            className="bg-white rounded-xl shadow-md p-6 max-w-2xl mx-auto mt-8"
+            className="bg-white rounded-xl shadow-md p-6 max-w-full mt-8"
             aria-labelledby="botanical-info-heading"
           >
             <p className="font-medium text-gray-800 my-4">
               Botanical Names:{" "}
-              <span className="italic text-gray-600 mb-4">
+              <span className="italic text-gray-600">
                 {selectedDetails?.botanical_names}
               </span>
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-              {/* Light requirements */}
-              <div className="flex items-start gap-3">
-                🌞
-                <div>
-                  <p className="font-medium text-gray-800">Light</p>
-                  <p className="text-sm text-gray-600">
-                    {selectedDetails?.light_requirements}
-                  </p>
+              {[
+                {
+                  icon: "🌞",
+                  label: "Light",
+                  value: selectedDetails?.light_requirements,
+                },
+                {
+                  icon: "💧",
+                  label: "Water",
+                  value: selectedDetails?.water_requirements,
+                },
+                {
+                  icon: "🐾",
+                  label: "Pet Friendly",
+                  value: selectedDetails?.pet_friendly,
+                },
+                {
+                  icon: "🌬️",
+                  label: "Air Purifying",
+                  value: selectedDetails?.air_purifying,
+                },
+              ].map(({ icon, label, value }) => (
+                <div key={label} className="flex items-start gap-3">
+                  <span aria-hidden="true">{icon}</span>
+                  <div>
+                    <p className="font-medium text-gray-800">{label}</p>
+                    <p className="text-sm text-gray-600">{value}</p>
+                  </div>
                 </div>
-              </div>
-
-              {/* Water requirements */}
-              <div className="flex items-start gap-3">
-                💧
-                <div>
-                  <p className="font-medium text-gray-800">Water</p>
-                  <p className="text-sm text-gray-600">
-                    {selectedDetails?.water_requirements}
-                  </p>
-                </div>
-              </div>
-
-              {/* Pet friendliness */}
-              <div className="flex items-start gap-3">
-                🐾
-                <div>
-                  <p className="font-medium text-gray-800">Pet Friendly</p>
-                  <p className="text-sm text-gray-600">
-                    {selectedDetails?.pet_friendly}
-                  </p>
-                </div>
-              </div>
-
-              {/* Air purifying */}
-              <div className="flex items-start gap-3">
-                🌬️
-                <div>
-                  <p className="font-medium text-gray-800">Air Purifying</p>
-                  <p className="text-sm text-gray-600">
-                    {selectedDetails?.air_purifying}
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </section>
 
-          {/* Add to cart button */}
+          {/* Add to Cart Button */}
           <button
             onClick={() => {
               if (selectedVariantId) {
@@ -211,18 +195,20 @@ const ProductDetailPage = () => {
                 );
                 toast.success("Product added to cart!");
               } else {
-                alert("Please select a variant first");
+                toast.error("Please select a variant first");
               }
             }}
             disabled={!selectedVariantId}
-            className={`px-6 py-3 my-6 w-full text-center rounded text-white font-semibold transition ${
+            aria-disabled={!selectedVariantId}
+            className={`px-6 py-3 mt-6 w-full text-center rounded text-white font-semibold transition ${
               selectedVariantId
                 ? "bg-primary hover:bg-green-700"
                 : "bg-gray-400 cursor-not-allowed"
-            }`}
+            } focus:outline-none focus:ring-2 focus:ring-green-600`}
           >
             Add to Cart
           </button>
+
           <CareInfoAccordion />
         </section>
       </article>
