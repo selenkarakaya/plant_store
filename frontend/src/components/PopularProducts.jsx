@@ -14,7 +14,9 @@ const PopularProducts = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 8;
 
-  const currentItems = paginate(items, currentPage, itemsPerPage);
+  const currentItems = Array.isArray(items)
+    ? paginate(items, currentPage, itemsPerPage)
+    : [];
 
   useEffect(() => {
     dispatch(fetchPopularProducts());

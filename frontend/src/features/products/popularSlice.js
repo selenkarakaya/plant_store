@@ -8,7 +8,7 @@ export const fetchPopularProducts = createAsyncThunk(
   "products/fetchPopular",
   async () => {
     const res = await axios.get(`${API_URL}/popular`);
-    return res.data;
+    return Array.isArray(res.data) ? res.data : [];
   }
 );
 
