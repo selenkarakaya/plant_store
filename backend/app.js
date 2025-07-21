@@ -11,10 +11,15 @@ require("./config/passport-setup");
 const app = express();
 
 //app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://plant-store-frontend.onrender.com",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend url
-    credentials: true, // credentials (cookie)
+    origin: allowedOrigins,
+    credentials: true,
   })
 );
 
