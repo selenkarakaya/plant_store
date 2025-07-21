@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, setUserInfo } from "./features/user/userSlice";
+import { Toaster } from "react-hot-toast";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -37,6 +38,32 @@ function App() {
   return (
     <>
       <Router>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              borderRadius: "8px",
+              background: "#333",
+              color: "#fff",
+            },
+
+            success: {
+              duration: 2000,
+              theme: {
+                primary: "green",
+                secondary: "white",
+              },
+            },
+            error: {
+              duration: 3000,
+              theme: {
+                primary: "red",
+                secondary: "white",
+              },
+            },
+          }}
+        />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

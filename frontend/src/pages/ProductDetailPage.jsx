@@ -8,6 +8,7 @@ import {
 import { addToCart } from "../features/carts/cartSlice";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CareInfoAccordion from "../components/CareInfoAccordion";
+import toast from "react-hot-toast";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -208,6 +209,7 @@ const ProductDetailPage = () => {
                     quantity: 1,
                   })
                 );
+                toast.success("Product added to cart!");
               } else {
                 alert("Please select a variant first");
               }

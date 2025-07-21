@@ -8,6 +8,7 @@ import {
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -61,14 +62,15 @@ const CartPage = () => {
                   {/* Quantity control */}
                   <div className="flex flex-col items-center border rounded p-2">
                     <button
-                      onClick={() =>
+                      onClick={() => {
                         dispatch(
                           updateCartItemQuantity({
                             cartItemId: item.id,
                             quantity: item.quantity + 1,
                           })
-                        )
-                      }
+                        );
+                        toast.success("Product quantity updated!");
+                      }}
                       className="text-gray-700 hover:text-black"
                       disabled={item.quantity >= item.stock}
                     >
@@ -78,14 +80,15 @@ const CartPage = () => {
                     <span className="font-medium py-1">{item.quantity}</span>
 
                     <button
-                      onClick={() =>
+                      onClick={() => {
                         dispatch(
                           updateCartItemQuantity({
                             cartItemId: item.id,
                             quantity: item.quantity - 1,
                           })
-                        )
-                      }
+                        );
+                        toast.success("Product quantity updated!");
+                      }}
                       className="text-gray-700 hover:text-black"
                       disabled={item.quantity <= 1}
                     >
@@ -106,7 +109,10 @@ const CartPage = () => {
                 </p>
 
                 <button
-                  onClick={() => dispatch(removeItemFromCart(item.id))}
+                  onClick={() => {
+                    dispatch(removeItemFromCart(item.id));
+                    toast.success("Product removed from cart!");
+                  }}
                   className="text-red-600 hover:text-red-800"
                   title="Remove item"
                 >
@@ -126,12 +132,6 @@ const CartPage = () => {
           <span>Subtotal:</span>
           <span>£{subtotal.toFixed(2)}</span>
         </div>
-
-        <div className="flex justify-between mb-2">
-          <span>Discount:</span>
-          <span>-£{discount.toFixed(2)}</span>
-        </div>
-
         <div className="flex justify-between mb-2">
           <span>Shipping:</span>
           <span>£{shippingFee.toFixed(2)}</span>
