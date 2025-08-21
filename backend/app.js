@@ -13,6 +13,7 @@ const app = express();
 //app.use(cors());
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:5174",
   "https://plant-store-frontend.onrender.com",
 ];
 
