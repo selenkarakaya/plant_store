@@ -198,7 +198,7 @@ const ProductDetailPage = () => {
                 toast.error("Please select a variant first");
               }
             }}
-            title={!selectedVariantId ? "Select a variant first" : "Add to cart"}
+            title={"Select a variant first"}
             disabled={!selectedVariantId}
             aria-disabled={!selectedVariantId}
             className={`px-6 py-3 mt-6 w-full text-center rounded text-white font-semibold transition ${
