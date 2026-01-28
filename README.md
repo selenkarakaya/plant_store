@@ -1,4 +1,4 @@
-# 🌿 Plant Store – E-Commerce Platform
+# 🌿 Plant Store – Online Houseplants E-Commerce Platform
 
 An e-commerce web application for selling houseplants, built with modern technologies on both frontend and backend. The project includes a customer shopping experience with product browsing, cart management, checkout, and admin controls.
 
