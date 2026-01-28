@@ -6,9 +6,9 @@ An e-commerce web application for selling houseplants, built with modern technol
 
 ### 🚀 Live Demo
 
-| 🌐 Live Application | 🔑 Test Account |
+| 🌐  Live Application | 🔑  Test Account |
 |--------------------|----------------|
-| 👉 [https://your-live-demo-url.com](https://plantstore-production-748f.up.railway.app/) | 👉 Email: test@plantstore.com, Password: 123456 |
+| 👉 [Click here](https://plantstore-production-748f.up.railway.app/) | 👉 Email: test@plantstore.com, Password: 123456 |
 
 </div>
 
