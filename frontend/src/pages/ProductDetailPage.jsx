@@ -208,7 +208,7 @@ const ProductDetailPage = () => {
             } focus:outline-none focus:ring-2 focus:ring-green-600`}
           >
             {!selectedVariantId ? (
-  <p className="text-sm text-red-600 mt-2">Please select a variant first</p> : "Add to Cart"
+  "Please select a variant first" : "Add to Cart"
 )}
             
           </button>
