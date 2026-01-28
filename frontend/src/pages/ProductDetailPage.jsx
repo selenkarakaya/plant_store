@@ -184,6 +184,9 @@ const ProductDetailPage = () => {
           </section>
 
           {/* Add to Cart Button */}
+          {!selectedVariantId && (
+  <p className="text-sm text-red-600 mt-2">Please select a variant first</p>
+)}
           <button
             onClick={() => {
               if (selectedVariantId) {
