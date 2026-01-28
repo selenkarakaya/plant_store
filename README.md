@@ -2,14 +2,18 @@
 
 An e-commerce web application for selling houseplants, built with modern technologies on both frontend and backend. The project includes a customer shopping experience with product browsing, cart management, checkout, and admin controls.
 
-## 🚀 Live Demo
+<div align="center">
 
-🌐 **Live Application:**  
-👉 [https://your-live-demo-url.com](https://plantstore-production-748f.up.railway.app/)
+### 🚀 Live Demo
 
-🔑 **Test Account:**  
-Email: test@plantstore.com  
-Password: 123456
+| 🌐 Live Application | 🔑 Test Account |
+|--------------------|----------------|
+| 👉 [https://your-live-demo-url.com](https://plantstore-production-748f.up.railway.app/) | 👉 Email: test@plantstore.com, Password: 123456 |
+
+</div>
+
+
+
 
 ## 🧱 Tech Stack
 
