@@ -207,7 +207,10 @@ const ProductDetailPage = () => {
                 : "bg-gray-400 cursor-not-allowed"
             } focus:outline-none focus:ring-2 focus:ring-green-600`}
           >
-            Add to Cart
+            {!selectedVariantId ? (
+  <p className="text-sm text-red-600 mt-2">Please select a variant first</p> : "Add to Cart"
+)}
+            
           </button>
           <CareInfoAccordion />
         </section>
