@@ -14,7 +14,6 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  
   "https://plantstore-production-748f.up.railway.app",
 ];
 
@@ -27,7 +26,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(errorHandler);
+
 app.use(cookieParser());
 app.use(passport.initialize());
 
@@ -48,3 +47,4 @@ const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+app.use(errorHandler);
