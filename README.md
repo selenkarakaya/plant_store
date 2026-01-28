@@ -34,55 +34,18 @@ An e-commerce web application for selling houseplants, built with modern technol
 - Google OAuth 2.0
 
 ---
+<div align="center">
+  <h2>Fully Completed Features</h2>
+</div>
 
-## ✅ Fully Completed Features
-
-### 🔐 Authentication
-
-- Email/password signup & login
-- Google OAuth login
-- JWT-based session persistence
-- Protected routes
-
-### 🛍 Product System
-
-- Product listing with image, price, and details
-- Product variant structure (e.g., size, type)
-- Product detail page with dynamic variant display
-- Search bar with case-insensitive matching
-- Pagination with `1 2 3 ...` UI
-
-### 🛒 Cart System
-
-- Backend-controlled cart tied to user
-- Add to cart from product detail
-- Increase/decrease quantity with stock validation
-- Remove item from cart
-- Total price and stock warnings
-- Cart persistence per user session
-
-### 💳 Checkout Page
-
-- Shipping information input
-- Order summary (item image, name, variant, quantity, total)
-- Ready structure for payment integration
-
-### 📸 UI & UX
-
-- Responsive design
-- Cloudinary integration for product images
-- Error/success notifications to user
-- Loading states handled
-- Styled and organized layout using Tailwind
-
-### 🧪 Backend
-
-- PostgreSQL DB with proper schema:
-  - `users`, `products`, `product_variants`, `plant_details`, `carts`, `cart_items`
-- Controllers and routes for all cart actions
-- Secure user session handling with middleware
-- Stock checks before cart operations
-
+| Feature Category &nbsp;&nbsp;| Details |
+|------------------|---------|
+| 🔐 Authentication | - Email/password signup & login<br>- Google OAuth login<br>- JWT-based session persistence<br>- Protected routes |
+| 🛍 Product System | - Product listing with image, price, and details<br>- Product variant structure (e.g., size, type)<br>- Product detail page with dynamic variant display<br>- Search bar with case-insensitive matching<br>- Pagination with `1 2 3 ...` UI |
+| 🛒 Cart System | - Backend-controlled cart tied to user<br>- Add to cart from product detail<br>- Increase/decrease quantity with stock validation<br>- Remove item from cart<br>- Total price and stock warnings<br>- Cart persistence per user session |
+| 💳 Checkout Page | - Shipping information input<br>- Order summary (item image, name, variant, quantity, total)<br>- Ready structure for payment integration |
+| 📸 UI & UX | - Responsive design<br>- Cloudinary integration for product images<br>- Error/success notifications to user<br>- Loading states handled<br>- Styled and organized layout using Tailwind |
+| 🧪 Backend | - PostgreSQL DB with proper schema: `users`, `products`, `product_variants`, `plant_details`, `carts`, `cart_items`<br>- Controllers and routes for all cart actions<br>- Secure user session handling with middleware<br>- Stock checks before cart operations |
 ---
 
 ## 🚧 Remaining Features (To Do)
